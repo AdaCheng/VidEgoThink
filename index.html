@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EgoThink</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Evaluating First-Person Perspective Thinking Capability of Vision-Language Models">
+  <meta name="keywords" content="EgoThink, VLM, VLM Evaluation, Vision Language Model, First-Person, Egocentric, Agent, artificial intelligence, AI, AGI">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> EgoThink: Evaluating First-Person Perspective Thinking Capability of Vision-Language Models</title>
+
+  <link rel="icon" href="./static/images/EgoThink_icon.png">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/leaderboard.css">
+
+  <!-- <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script> -->
+  <script type="text/javascript" src="static/js/sort-table.js" defer></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/question_card.js"></script>
+  <script src="./data/results/data_setting.js" defer></script>
+  <script src="./data/results/model_scores.js" defer></script>
+  <script src="./visualizer/data/data_public.js" defer></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <!-- <a class="navbar-item" href="https://github.com/imoneoi/openchat">
+            <b>OpenChat</b> <p style="font-size:18px; display: inline; margin-left: 5px;">🔥</p>
+          </a> -->
+          <a class="navbar-item" href="https://zhichengg.github.io/stb.github.io/">
+            <b>StableToolBench</b>
+          </a>
+          <!-- <a class="navbar-item" href="https://osu-nlp-group.github.io/TableLlama/">
+            TableLlama 
+          <a class="navbar-item" href="https://osu-nlp-group.github.io/Mind2Web/">
+            Mind2Web
+          </a> -->
+          <!-- </a> -->
+<!--           </a> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title is-bold">
+            <img src="static/images/EgoThink_icon.png" style="width:1em;vertical-align: middle" alt="Logo"/> 
+            <span class="mmmu" style="vertical-align: middle">EgoThink</span>
+            </h1>
+          <h2 class="subtitle is-3 publication-subtitle">
+            Evaluating First-Person Perspective Thinking Capability of Vision-Language Models 
+          </h2>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Sijie Cheng*<sup style="color:#6fbf73;">†,1,2,3</sup>,</span>
+            <span class="author-block">Zhicheng Guo*<sup style="color:#ffac33;">1,2,3</sup>,</span>
+            <span class="author-block">Jingwen Wu*<sup style="color:#ed4b82;">4</sup>,</span>
+            <span class="author-block">Kechen Fang<sup style="color:#007bff;">5</sup>,</span><br>
+            <span class="author-block">Peng Li<sup style="color:#ed4b82;">✉,2</sup>,</span>
+            <span class="author-block">Huaping Liu<sup style="color:#ffac33;">1,3</sup>,</span>
+            <span class="author-block">Yang Liu<sup style="color:#ed4b82;">✉,1,2,3</sup>,</span>
+            <!-- <span class="author-block">Dongfu Jiang<sup style="color:#ffac33;">2</sup>,</span>
+            <span class="author-block">Weiming Ren<sup style="color:#ffac33;">2</sup>,</span>
+            <span class="author-block">Yuxuan Sun<sup style="color:#007bff;">4</sup>,</span>
+            <span class="author-block">Cong Wei<sup style="color:#ffac33;">2</sup>,</span>
+            <span class="author-block">Botao Yu<sup style="color:#ed4b82;">3</sup>,</span>
+            <span class="author-block">Ruibin Yuan<sup style="color:#ffac33;">5</sup>,</span>
+            <span class="author-block">Renliang Sun<sup style="color:#ffac33;">2</sup>,</span>
+            <span class="author-block">Ming Yin<sup style="color:#9b51e0;">7</sup>,</span>
+            <span class="author-block">Boyuan Zheng<sup style="color:#ed4b82;">3</sup>,</span>
+            <span class="author-block">Zhenzhu Yang<sup style="color:#007bff;">4</sup>,</span>
+            <span class="author-block">Yibo Liu<sup style="color:#ed4b82;">6</sup>,</span>
+            <span class="author-block">Wenhao Huang<sup style="color:#007bff;">4</sup>,</span><br>
+            <span class="author-block">Huan Sun*<sup style="color:#ed4b82;">3</sup>,</span>
+            <span class="author-block">Yu Su*<sup style="color:#ed4b82;">†,3</sup>,</span>
+            <span class="author-block">Wenhu Chen*<sup style="color:#ffac33;">†,2</sup></span> -->
+          </div>
+          
+          <br>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup style="color:#6fbf73;">1</sup>Department of Computer Science and Technology, Tsinghua University</span><br>
+            <span class="author-block"><sup style="color:#ffac33;">2</sup>Institute for AI Industry Research (AIR), Tsinghua University</span><br>
+            <span class="author-block"><sup style="color:#ed4b82;">3</sup>Beijing National Research Center for Information Science and Technology</span><br>
+            <span class="author-block"><sup style="color:#007bff;">4</sup>Department of Electrical and Computer Engineering, University of Toronto</span></br>
+            <span class="author-block"><sup style="color:#ffac33;">5</sup>Zhili College, Tsinghua University</span><br>
+            <!-- <span class="author-block"><sup style="color:#ed4b82;">6</sup>University of Victoria,</span>
+            <span class="author-block"><sup style="color:#9b51e0;">7</sup>Princeton University</span> -->
+          </div>
+
+          <br>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">*Equal contribution, ✉Corresponding author</span><br>
+            <span class="author-block">†Project Lead:</span>
+            <span class="author-block"><a href="mailto:csj23@mails.tsinghua.edu.cn">csj23@mails.tsinghua.edu.cn</a></span>
+            <!-- <span class="author-block"><a href="mailto:su.809@osu.edu">su.809@osu.edu</a>,</span>
+            <span class="author-block"><a href="mailto:wenhuchen@uwaterloo.ca">wenhuchen@uwaterloo.ca</a></span> -->
+          </div>
+          
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2311.15596.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://huggingface.co/papers/2311.15596"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <p style="font-size:18px">🤗</p>
+                  </span>
+                  <span>HF Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <!-- @TODO: change links -->
+                <a href="https://huggingface.co/datasets/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <!-- <i class="far fa-images"></i> -->
+                      <p style="font-size:18px">🤗</p>
+                      <!-- 🔗 -->
+                  </span>
+                  <span>Dataset</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/AdaCheng/EgoThink"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+             
+              
+              <!-- Leaderboard Link. -->
+              <span class="link-block">
+                <a href="#leaderboard"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <p style="font-size:18px">🏆</p>
+                  </span>
+                  <span>Leaderboard</span>
+                </a>
+              </span>
+              <!-- Visualization Link. -->
+              <!-- <span class="link-block">
+                <a href="#examples"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <p style="font-size:18px">📖</p>
+                  </span>
+                  <span>Examples</span>
+                </a>
+              </span> -->
+              <!-- Twitter Link. -->
+              <!-- <span class="link-block">
+                <a href="https://twitter.com/xiangyue96/status/1729698316554801358"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"> -->
+                      <!-- <i class="far fa-images"></i> -->
+                      <!-- 💻🔗 -->
+                      <!-- <p style="font-size:18px">🌐</p> -->
+                  <!-- </span>
+                  <span>Twitter</span>
+                </a>
+              </span> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+  }
+  </style>
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <!-- <div class="hero-body">
+      <img src="static/images/tease_scores.png" alt="Examples from the dataset"/>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+        free-viewpoint
+        portraits.
+      </h2>
+    </div> -->
+      <!-- <div class="box m-5"> --> 
+        <div class="content has-text-centered">
+          <img src="static/images/Intro.jpg" alt="geometric reasoning" width="50%"/>
+          <p> <b><i>Figure 1:</i></b> The main categories of EgoThink to comprehensively assess the capability of thinking from a first-person perspective. </p>
+        </div>
+      <!-- </div> -->
+    <!-- </div> -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="margin-bottom: 2vh;">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">🔔News</h2>
+        <div class="content has-text-justified">
+          <p>
+            <b>[2024-10]: Our related paper <a href="https://arxiv.org/abs/2410.11623">VidEgoThink: Assessing Egocentric Video Understanding Capabilities for Embodied AI</a> has been released.</b><br>
+            <b>[2024-09]: EgoThink is invited to be presented in <a href="https://zhidx.com/p/441426.html">ZhiDX</a>.</b><br>
+            <b>[2024-04]: EgoThink is invited to be presented in ByteDance.</b><br>
+            <b>[2024-04]: EgoThink will be presented as a Poster (Highlight👀) in CVPR 2024.</b><br>
+            <b>[2024-03]: EgoThink is presented in <a href="https://www.bilibili.com/video/BV13D42157gP/?spm_id_from=333.1387.search.video_card.click">AITIME</a>. </b><br>
+            <b>[2024-02]: EgoThink has been accepted by CVPR 2024.</b><br>
+            <b>[2023-11]: Our paper <a href="https://arxiv.org/abs/2311.15596">Can Vision-Language Models Think from a First-Person Perspective?</a> has been released.</b><br>
+            <!-- <b>🔥[2023-11-27]: Our evaluation server for the test set is now available on <a href="https://eval.ai/web/challenges/challenge-page/2179/overview">EvalAI</a>. We welcome all submissions and look forward to your participation! 😆</b> -->
+          </p>
+      </div>      
+        <h2 class="title is-3">Abstraction</h2>
+        <div class="content has-text-justified">
+          <p>
+            Vision-language models (VLMs) have recently shown promising results in traditional downstream tasks. Evaluation studies have emerged to assess their abilities, with the majority focusing on the third-person perspective, and only a few addressing specific tasks from the first-person perspective. However, the capability of VLMs to "think" from a first-person perspective, a crucial attribute for advancing autonomous agents and robotics, remains largely unexplored. To bridge this research gap, we introduce EgoThink, a novel visual question-answering benchmark that encompasses six core capabilities with twelve detailed dimensions. The benchmark is constructed using selected clips from egocentric videos, with manually annotated question-answer pairs containing first-person information. To comprehensively assess VLMs, we evaluate eighteen popular VLMs on EgoThink. Moreover, given the open-ended format of the answers, we use GPT-4 as the automatic judge to compute single-answer grading. Experimental results indicate that although GPT-4V leads in numerous dimensions, all evaluated VLMs still possess considerable potential for improvement in first-person perspective tasks. Meanwhile, enlarging the number of trainable parameters has the most significant impact on model performance on EgoThink. In conclusion, EgoThink serves as a valuable addition to existing evaluation benchmarks for VLMs, providing an indispensable resource for future research in the realm of embodied artificial intelligence and robotics.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+</div>
+</section>
+
+<!-- DATASET SECTION -->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+  <h1 class="title is-1 mmmu">
+    <img src="static/images/EgoThink_icon.png" style="width:1em;vertical-align: middle" alt="Logo"/>
+    <span class="mmmu" style="vertical-align: middle">EgoThink Benchmark</span>
+  </h1>
+  </div>
+</section>
+
+<!-- <section class="section">
+  <div class="container" style="margin-bottom: 2vh;">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Introduction</h2>
+        <div class="content has-text-justified">
+          <p> -->
+            
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            We specifically design six categories with twelve fine-grained dimensions from the first-person perspective for quantitative evaluation.
+          </p>
+          <img src="static/images/benchmark.jpg" alt="algebraic reasoning" class="center">
+          <div class="content has-text-centered">
+            <p><b><i>Figure 2:</i></b> Categories with fine-grained dimensions and their corresponding examples of EgoThink benchmark.</p>
+          </div>
+          <p>
+            <ul>
+              <li>
+                <b>Object: What is around me?</b> Recognizing objects in the real world is a preliminary ability of the human visual system. Images from a first-person or egocentric perspective pay more attention to the objects surrounding the subject or in hands. Moreover, we further divide the object category into three fine-grained dimensions: (1) <i>Existence</i>, predicting whether there is an object as described in the images; (2) <i>Attribute</i>, detecting properties or characteristics (e.g., color) of an object; 
+                (3) <i>Affordance</i>, predicting potential actions that a human can apply to an object.
+              </li>
+              <li>
+                <b>Activity: What am I doing?</b> Activity recognition is to automatically recognize specific human activities in video frames or still images. From the egocentric perspective, we mainly focus on actions or activities based on object-hand interaction.
+              </li>
+              <li>
+                <b>Localization: Where am I?</b> In reality, localization is a critical capability for navigation and scene understanding in the real world. Here we investigate the localization capability from two aspects, <i>Location</i> and <i>Spatial Relationship</i>. Location indicates detecting the scene surrounding the subject. Spatial reasoning contains allocentric and egocentric perspectives. We focus on the egocentric perspective, i.e., the position of the object with respect to the subject.
+              </li>
+              <li>
+                <b>Reasoning: What about the situation around me?</b> During the complex decision-making process, reasoning lies everywhere in our lives. Here we mainly focus on <i>Counting</i>, <i>Comparison</i>, and <i>Situated Reasoning</i>. Due to the first-person perspective, we generally count or compare objects in our hands or surrounding ourselves. As for situated reasoning, we employ cases that cannot be answered directly from the information in the images and require further reasoning processes.
+              </li>
+              <li>
+                <b>Forecasting: What will happen to me?</b> Forecasting is a critical skill in the real world. From an egocentric view, forecasting always predicts the future of object-state transformation or hand-object interactions.
+              </li> 
+              <li>
+                <b>Planning: How will I do?</b> In reality, planning is an important capability to deal with complex problems, typically applied in <i>Navigation</i> and <i>Assistance</i>. Navigation is going to a goal location from a start position, while assistance is offering instructions to solve daily problems.
+              </li> 
+            </ul>
+          </p>
+        </div>
+    </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Comparisons with Existing Benchmarks</h2>
+        <div class="content has-text-justified">
+          <p>
+            The ability to think from a first-person perspective is not adequately addressed by current evaluation benchmarks for VLMs. On one hand, most of these benchmarks (six out of nine, as listed in Table 1) focus solely on the third-person perspective. On the other hand, those benchmarks that do consider the first-person perspective only encompass a limited range of capabilities. For instance, EgoTaskQA examines spatial, temporal, and causal aspects, whereas EgoVQA is limited to object, action, and person aspects. Therefore, there is a clear need to develop a comprehensive benchmark to evaluate the first-person capabilities of VLMs more effectively.
+        </p>
+        <div class="content has-text-centered">
+          <img src="static/images/comparison.png" alt="algebraic reasoning" class="center">
+          <p><b><i>Table 1:</i></b> Comparison of recent comprehensive evaluation benchmarks of VLMs and our proposed benchmark EgoThink. Third and first indicate third-person and first-person perspectives. Datasets/Handcraft/LLMs denote existing datasets, manual annotation, and automatic generation by LLMs. PS/MC/OE indicate pairwise scoring, multi-choice, and open-ended question-answering, respectively.</p>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="columns is-centered m-6">
+      <div class="column is-full has-text-centered content">
+        <h2 class="title is-3">Statistics</h2>
+        <!-- <div id="results-carousel" class="carousel results-carousel"> -->
+        <div class="content has-text-centered">
+          <img src="static/images/statistics.png" alt="algebraic reasoning" width="75%"/>
+          <p><b><i>Table 2:</i></b> Statistics of six categories with twelve dimensions in our EgoThink benchmark, where spatial* indicates spatial relationship and situated* indicates situated reasoning.</p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="static/images/distribution.jpg" alt="arithmetic reasoning" width="35%"/>
+          <p><b><i>Figure 3:</i></b> This chart illustrates the distribution of various scene categories within the EgoThink dataset. The "others" category encompasses 13 different scene types, each representing less than one percent of total scenes.</p>
+        </div>
+        <!-- <div class="box m-5">
+          <div class="content has-text-centered">
+            <img src="static/images/image_type_count.png" alt="arithmetic reasoning" width="80%"/>
+            <p> Distribution of image types in the MMMU dataset</p>
+          </div>
+        </div> -->
+      <!-- </div> -->
+      </div>
+    </div>
+    <!-- <div class="columns is-centered m-6">
+      <div class="column is-max-desktop has-text-centered">
+        <h2 class="title is-3" id="visualization">Visualization</h2>
+        <iframe src="visualizer/explore.html" style="width: 100%;min-height: 100vh; border-radius: 20px;"></iframe>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+<!-- RESULTS SECTION -->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mmmu" id="leaderboard">Leaderboard</h1>
+  </div>
+</section>
+
+
+
+<!-------------------------------------------------------------------- RESULTS SECTION -------------------------------------------------------------------->
+<section class="section">
+  <div class="container">
+    <!-- <div class="columns is-centered has-text-centered"> -->
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <!-- <div class="column is-four-fifths"> -->
+        <!-- <h2 class="title is-3">Vision-Language Models</h2> -->
+        <!-- <div class="content has-text-centered"> -->
+          <!-- <img src="static/images/vlms.png" alt="algebraic reasoning" class="center"> -->
+          <!-- <p><b><i>Table 3:</i></b> Statistics of compared API-based and open-source VLMs, where TTP and ToP indicate Total Trainable Parameters and Total Parameters, respectively. Moreover, EgoData and Video indicate that there are egocentric visual data and video data for training, respectively.</p> -->
+        <!-- </div> -->
+      <!-- </div> -->
+    <!-- </div> -->
+
+    <div class="columns is-centered m-6">
+      <!-- <div class="column is-full has-text-centered content"> -->
+        <!-- <h2 class="title is-3" id="leaderboard">Leaderboard</h2> -->
+        <div class="content">
+          <div class="content has-text-justified">
+            <p>
+              Evaluating open-ended model generations is a non-trivial problem. To address this, we propose using GPT-4 as an automatic evaluator to better measure the generated answers. We continuously update the results of recent VLMs to ensure the effectiveness of EgoThink. Feel free to contribute to the performance of your model by adding it to our <a href="https://github.com/AdaCheng/EgoThink/blob/main/index.html">index.html</a>; we will review and merge it accordingly.
+            </p>
+          </div>
+
+          <!-- <button id="toggleButton" onclick="changeButtonText()">Switch to Validation Set</button> -->
+          <table id="table1" class="js-sort-table">
+            <tr>
+              <td class="js-sort-number"><strong>Reset</strong></td>
+              <td class="js-sort-number"><strong>Average</strong></td>
+              <td class="js-sort-number"><strong>Exist</strong></td>
+              <td class="js-sort-number"><strong>Attr</strong></td>
+              <td class="js-sort-number"><strong>Afford</strong></td>
+              <td class="js-sort-number"><strong>Activity</strong></td>
+              <td class="js-sort-number"><strong>Loc</strong></td>
+              <td class="js-sort-number"><strong>Spatial</strong></td>
+              <td class="js-sort-number"><strong>Count</strong></td>
+              <td class="js-sort-number"><strong>Compar</strong></td>
+              <td class="js-sort-number"><strong>Situtaed</strong></td>
+              <td class="js-sort-number"><strong>Forecasting</strong></td>
+              <td class="js-sort-number"><strong>Nav</strong></td>
+              <td class="js-sort-number"><strong>Assist</strong></td>
+            </tr>
+            <tr style="background-color: #f8fffe;">
+              <td style="text-align: left;"><b>GPT-4V(ision)</b></td>
+              <td><b>65.5</b></td>
+              <td>62.0</td>
+              <td><b>82.0</b></td>
+              <td><b>58.0</b></td>
+              <td><b>59.5</b></td>
+              <td style="text-decoration: underline;">86.0</td>
+              <td style="text-decoration: underline;">62.0</td>
+              <td><b>42.0</b></td>
+              <td>48.0</td>
+              <td><b>83.0</b></td>
+              <td><b>55.0</b></td>
+              <td><b>64.0</b></td>
+              <td><b>84.0</b></td>
+            </tr>  
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>OpenFlamingo-7B</b></td>
+              <td>27.2</td>
+              <td>16.0</td>
+              <td>55.0</td>
+              <td>37.0</td>
+              <td>15.0</td>
+              <td>34.0</td>
+              <td>34.0</td>
+              <td>21.0</td>
+              <td>40.0</td>
+              <td>21.0</td>
+              <td>31.0</td>
+              <td>11.0</td>
+              <td>11.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>BLIP-2-6.7B</b></td>
+              <td>28.1</td>
+              <td>49.0</td>
+              <td>29.0</td>
+              <td>39.0</td>
+              <td>33.5</td>
+              <td>60.0</td>
+              <td>31.0</td>
+              <td>3.0</td>
+              <td>21.0</td>
+              <td>33.0</td>
+              <td>25.0</td>
+              <td>8.0</td>
+              <td>6.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>LLaVA-1.5-7B</b></td>
+              <td>39.0</td>
+              <td>33.0</td>
+              <td>47.0</td>
+              <td style="text-decoration: underline;">54.0</td>
+              <td>35.5</td>
+              <td>35.0</td>
+              <td>49.0</td>
+              <td>20.0</td>
+              <td>47.0</td>
+              <td>37.0</td>
+              <td>27.0</td>
+              <td>29.0</td>
+              <td>54.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>MiniGPT-4-7B</b></td>
+              <td>40.6</td>
+              <td>50.0</td>
+              <td>56.0</td>
+              <td>46.0</td>
+              <td>39.0</td>
+              <td>55.0</td>
+              <td>49.0</td>
+              <td>14.0</td>
+              <td>48.0</td>
+              <td>31.0</td>
+              <td>41.5</td>
+              <td>14.0</td>
+              <td>44.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>InstructBLIP-7B</b></td>
+              <td>42.4</td>
+              <td>50.0</td>
+              <td>33.0</td>
+              <td>45.0</td>
+              <td>47.5</td>
+              <td>77.0</td>
+              <td>38.0</td>
+              <td>18.0</td>
+              <td>43.0</td>
+              <td>67.0</td>
+              <td>40.5</td>
+              <td>19.0</td>
+              <td>31.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>LLaMA-Adapter-7B</b></td>
+              <td>42.5</td>
+              <td>37.0</td>
+              <td>60.0</td>
+              <td>46.0</td>
+              <td>34.5</td>
+              <td>48.0</td>
+              <td>51.0</td>
+              <td>29.0</td>
+              <td>39.0</td>
+              <td>25.0</td>
+              <td>41.5</td>
+              <td>42.0</td>
+              <td>57.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>Otter-I-7B</b></td>
+              <td>45.3</td>
+              <td>48.0</td>
+              <td>56.0</td>
+              <td>39.0</td>
+              <td>44.0</td>
+              <td>60.0</td>
+              <td>44.0</td>
+              <td>39.0</td>
+              <td>48.0</td>
+              <td>42.0</td>
+              <td>38.0</td>
+              <td>31.0</td>
+              <td>55.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>PandaGPT-7B</b></td>
+              <td>46.2</td>
+              <td>40.0</td>
+              <td>56.0</td>
+              <td>41.0</td>
+              <td>37.0</td>
+              <td>61.0</td>
+              <td>52.0</td>
+              <td>19.0</td>
+              <td style="text-decoration: underline;">52.0</td>
+              <td>53.0</td>
+              <td>43.0</td>
+              <td>39.0</td>
+              <td>61.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>mPLUG-owl-7B</b></td>
+              <td>48.8</td>
+              <td>56.0</td>
+              <td>58.0</td>
+              <td>47.0</td>
+              <td>53.0</td>
+              <td>60.0</td>
+              <td>53.0</td>
+              <td>25.0</td>
+              <td>49.0</td>
+              <td>44.0</td>
+              <td>49.5</td>
+              <td>33.0</td>
+              <td>58.0</td>
+            </tr>
+            <tr style="background-color: #f9f2f8;">
+              <td style="text-align: left;"><b>LLaVA-7B</b></td>
+              <td>49.6</td>
+              <td>63.0</td>
+              <td>58.0</td>
+              <td>50.0</td>
+              <td>47.0</td>
+              <td>81.0</td>
+              <td>45.0</td>
+              <td>24.0</td>
+              <td>36.0</td>
+              <td>47.0</td>
+              <td>49.5</td>
+              <td>35.0</td>
+              <td>60.0</td>
+            </tr>
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>InstructBLIP-13B</b></td>
+              <td>42.8</td>
+              <td>52.0</td>
+              <td>55.0</td>
+              <td>49.0</td>
+              <td>54.0</td>
+              <td>63.0</td>
+              <td>49.0</td>
+              <td>11.0</td>
+              <td>33.0</td>
+              <td>59.0</td>
+              <td>44.0</td>
+              <td>19.0</td>
+              <td>25.0</td>
+            </tr>
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>PandaGPT-13B</b></td>
+              <td>43.1</td>
+              <td>35.0</td>
+              <td>52.0</td>
+              <td>41.0</td>
+              <td>40.5</td>
+              <td>68.0</td>
+              <td>31.0</td>
+              <td>32.0</td>
+              <td>40.0</td>
+              <td>47.0</td>
+              <td>45.5</td>
+              <td>16.0</td>
+              <td>69.0</td>
+            </tr>
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>LLaVA-13B-Vicuna</b></td>
+              <td>46.4</td>
+              <td>54.0</td>
+              <td>62.0</td>
+              <td>52.0</td>
+              <td>46.0</td>
+              <td>53.0</td>
+              <td>46.0</td>
+              <td>26.0</td>
+              <td>44.0</td>
+              <td>29.0</td>
+              <td>44.0</td>
+              <td>35.0</td>
+              <td>66.0</td>
+            </tr>       
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>BLIP-2-11B</b></td>
+              <td>49.6</td>
+              <td>52.0</td>
+              <td>62.0</td>
+              <td>41.0</td>
+              <td>49.5</td>
+              <td><b>90.0</b></td>
+              <td><b>66.0</b></td>
+              <td>25.0</td>
+              <td>50.0</td>
+              <td>70.0</td>
+              <td>48.0</td>
+              <td>18.0</td>
+              <td>24.0</td>
+            </tr>       
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>InstructBLIP-11B</b></td>
+              <td>51.1</td>
+              <td><b>74.0</b></td>
+              <td style="text-decoration: underline;">68.0</td>
+              <td>48.0</td>
+              <td>49.5</td>
+              <td style="text-decoration: underline;">86.0</td>
+              <td>52.0</td>
+              <td>32.0</td>
+              <td>49.0</td>
+              <td style="text-decoration: underline;">73.0</td>
+              <td style="text-decoration: underline;">53.0</td>
+              <td>16.0</td>
+              <td>17.0</td>
+            </tr>       
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>LLaVA-13B-Llama2</b></td>
+              <td>55.1</td>
+              <td>65.0</td>
+              <td>61.0</td>
+              <td>45.0</td>
+              <td style="text-decoration: underline;">56.0</td>
+              <td>77.0</td>
+              <td>53.0</td>
+              <td style="text-decoration: underline;">34.0</td>
+              <td>34.0</td>
+              <td>66.0</td>
+              <td>50.5</td>
+              <td style="text-decoration: underline;">49.0</td>
+              <td style="text-decoration: underline;">71.0</td>
+            </tr> 
+            <tr style="background-color: #f4f9fe;">
+              <td style="text-align: left;"><b>LLaVA-1.5-13B</b></td>
+              <td style="text-decoration: underline;">55.3</td>
+              <td style="text-decoration: underline;">66.0</td>
+              <td>55.0</td>
+              <td>51.0</td>
+              <td>55.0</td>
+              <td>82.0</td>
+              <td>57.0</td>
+              <td>32.0</td>
+              <td><b>56.0</b></td>
+              <td>67.0</td>
+              <td>48.5</td>
+              <td>39.0</td>
+              <td>55.0</td>
+            </tr> 
+          </table>
+
+          <p> <b><i>Table 4:</i></b> Combined single-answer grading scores on zero-shot setups for various dimensions. The <b>bold</b> indicates the best performance while the <u>underline</u> indicates the second-best performance. Exist, Attr, Afford, Loc, Spatial, Count, Compar, Situated, Nav and Assist represent existence, attribute, affordance, location, spatial relationship, counting, comparison, situated reasoning, navigation, and assistance.</p> 
+        </div>
+      <!-- </div> -->
+    </div>
+
+<!-------------------------------------------------------------------- Correct Example -------------------------------------------------------------------->
+
+    <!-- <div class="columns is-centered m-6">
+      <div class="column is-full has-text-centered content">
+        <h2 class="title is-3" id="examples">Examples</h2>
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_1.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_2.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_3.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_4.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_5.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_6.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_7.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_8.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_9.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_10.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/case_11.png" alt="grade-lv" width="60%"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    
+  </div>
+</section>
+
+<!-------------------------------------------------------------------- RESULTS SECTION -------------------------------------------------------------------->
+
+<!-- @PAN TODO: bibtex -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 has-text-centered">BibTeX</h2>
+    <pre><code>
+      @InProceedings{Cheng_2024_CVPR,
+        author    = {Cheng, Sijie and Guo, Zhicheng and Wu, Jingwen and Fang, Kechen and Li, Peng and Liu, Huaping and Liu, Yang},
+        title     = {EgoThink: Evaluating First-Person Perspective Thinking Capability of Vision-Language Models},
+        booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+        month     = {June},
+        year      = {2024},
+        pages     = {14291-14302}
+    }
+</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <!-- <div class="container"> -->
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This website is website adapted from <a href="https://mmmu-benchmark.github.io/">MMMU</a>, licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+
+</footer>
+
+
+<style>
+  .hidden {
+      display: none;
+  }
+  .sortable:hover {
+      cursor: pointer;
+  }
+  .asc::after {
+      content: ' ↑';
+  }
+  .desc::after {
+      content: ' ↓';
+  }
+  #toggleButton {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    color: #555555;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px; 
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition-duration: 0.4s;
+  }
+
+  #toggleButton:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); /* 鼠标悬停时的阴影效果 */
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+
+  th, td {
+      text-align: left;
+      padding: 8px;
+  }
+
+  th {
+      background-color: #f2f2f2;
+      border-bottom: 2px solid #ddd;
+  }
+
+  td:hover {background-color: #ffffff;}
+</style>
+
+</body>
+</html>
