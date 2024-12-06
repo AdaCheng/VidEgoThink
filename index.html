@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>EgoThink</title>
+  <title>VidEgoThink</title>
     <style>
         .hidden {
             display: none;
@@ -10,12 +10,12 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <meta charset="utf-8">
   <meta name="description"
-        content="Evaluating First-Person Perspective Thinking Capability of Vision-Language Models">
-  <meta name="keywords" content="EgoThink, VLM, VLM Evaluation, Vision Language Model, First-Person, Egocentric, Agent, artificial intelligence, AI, AGI">
+        content="Assessing Egocentric Video Understanding Capabilities for Embodied AI">
+  <meta name="keywords" content="VidEgoThink, Egocentric, Embodied AI, Vision Language Model, First-Person, Benchmark, Artificial Intelligence, AI, AGI">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> EgoThink: Evaluating First-Person Perspective Thinking Capability of Vision-Language Models</title>
+  <title> VidEgoThink: Assessing Egocentric Video Understanding Capabilities for Embodied AI</title>
 
-  <link rel="icon" href="./static/images/EgoThink_icon.png">
+  <link rel="icon" href="./static/images/VidEgoThink_icon.png">
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -61,16 +61,12 @@
           <!-- <a class="navbar-item" href="https://github.com/imoneoi/openchat">
             <b>OpenChat</b> <p style="font-size:18px; display: inline; margin-left: 5px;">🔥</p>
           </a> -->
+          <a class="navbar-item" href="https://adacheng.github.io/EgoThink/">
+            <b>EgoThink</b>
+          </a>
           <a class="navbar-item" href="https://zhichengg.github.io/stb.github.io/">
             <b>StableToolBench</b>
           </a>
-          <!-- <a class="navbar-item" href="https://osu-nlp-group.github.io/TableLlama/">
-            TableLlama 
-          <a class="navbar-item" href="https://osu-nlp-group.github.io/Mind2Web/">
-            Mind2Web
-          </a> -->
-          <!-- </a> -->
-<!--           </a> -->
         </div>
       </div>
     </div>
@@ -86,34 +82,21 @@
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title is-bold">
             <img src="static/images/EgoThink_icon.png" style="width:1em;vertical-align: middle" alt="Logo"/> 
-            <span class="mmmu" style="vertical-align: middle">EgoThink</span>
+            <span class="mmmu" style="vertical-align: middle">VidEgoThink</span>
             </h1>
           <h2 class="subtitle is-3 publication-subtitle">
-            Evaluating First-Person Perspective Thinking Capability of Vision-Language Models 
+            Assessing Egocentric Video Understanding Capabilities for Embodied AI 
           </h2>
           <div class="is-size-5 publication-authors">
-            <span class="author-block">Sijie Cheng*<sup style="color:#6fbf73;">†,1,2,3</sup>,</span>
-            <span class="author-block">Zhicheng Guo*<sup style="color:#ffac33;">1,2,3</sup>,</span>
-            <span class="author-block">Jingwen Wu*<sup style="color:#ed4b82;">4</sup>,</span>
-            <span class="author-block">Kechen Fang<sup style="color:#007bff;">5</sup>,</span><br>
-            <span class="author-block">Peng Li<sup style="color:#ed4b82;">✉,2</sup>,</span>
-            <span class="author-block">Huaping Liu<sup style="color:#ffac33;">1,3</sup>,</span>
-            <span class="author-block">Yang Liu<sup style="color:#ed4b82;">✉,1,2,3</sup>,</span>
-            <!-- <span class="author-block">Dongfu Jiang<sup style="color:#ffac33;">2</sup>,</span>
-            <span class="author-block">Weiming Ren<sup style="color:#ffac33;">2</sup>,</span>
-            <span class="author-block">Yuxuan Sun<sup style="color:#007bff;">4</sup>,</span>
-            <span class="author-block">Cong Wei<sup style="color:#ffac33;">2</sup>,</span>
-            <span class="author-block">Botao Yu<sup style="color:#ed4b82;">3</sup>,</span>
-            <span class="author-block">Ruibin Yuan<sup style="color:#ffac33;">5</sup>,</span>
-            <span class="author-block">Renliang Sun<sup style="color:#ffac33;">2</sup>,</span>
-            <span class="author-block">Ming Yin<sup style="color:#9b51e0;">7</sup>,</span>
-            <span class="author-block">Boyuan Zheng<sup style="color:#ed4b82;">3</sup>,</span>
-            <span class="author-block">Zhenzhu Yang<sup style="color:#007bff;">4</sup>,</span>
-            <span class="author-block">Yibo Liu<sup style="color:#ed4b82;">6</sup>,</span>
-            <span class="author-block">Wenhao Huang<sup style="color:#007bff;">4</sup>,</span><br>
-            <span class="author-block">Huan Sun*<sup style="color:#ed4b82;">3</sup>,</span>
-            <span class="author-block">Yu Su*<sup style="color:#ed4b82;">†,3</sup>,</span>
-            <span class="author-block">Wenhu Chen*<sup style="color:#ffac33;">†,2</sup></span> -->
+            <span class="author-block">Sijie Cheng<sup style="color:#6fbf73;">†,1,2,6</sup>,</span>
+            <span class="author-block">Kechen Fang*<sup style="color:#ffac33;">2,5</sup>,</span>
+            <span class="author-block">Yangyang Yu*<sup style="color:#ed4b82;">2,5</sup>,</span>
+            <span class="author-block">Sicheng Zhou*<sup style="color:#007bff;">2,3</sup>,</span><br>
+            <span class="author-block">Bohao Li<sup style="color:#ed4b82;">4,6</sup>,</span>
+            <span class="author-block">Ye Tian<sup style="color:#9b51e0;">6</sup>,</span>
+            <span class="author-block">Tingguang Li<sup style="color:#9b51e0;">6</sup>,</span>
+            <span class="author-block">Lei Han<sup style="color:#9b51e0;">✉,6</sup>,</span>
+            <span class="author-block">Yang Liu<sup style="color:#ed4b82;">✉,1,2</sup>,</span>
           </div>
           
           <br>
@@ -121,9 +104,10 @@
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup style="color:#6fbf73;">1</sup>Department of Computer Science and Technology, Tsinghua University</span><br>
             <span class="author-block"><sup style="color:#ffac33;">2</sup>Institute for AI Industry Research (AIR), Tsinghua University</span><br>
-            <span class="author-block"><sup style="color:#ed4b82;">3</sup>Beijing National Research Center for Information Science and Technology</span><br>
-            <span class="author-block"><sup style="color:#007bff;">4</sup>Department of Electrical and Computer Engineering, University of Toronto</span></br>
+            <span class="author-block"><sup style="color:#ed4b82;">3</sup>Department of Mechanical and Industrial Engineering, University of Toronto</span><br>
+            <span class="author-block"><sup style="color:#007bff;">4</sup>School of Data Science, The Chinese University of HongKong</span></br>
             <span class="author-block"><sup style="color:#ffac33;">5</sup>Zhili College, Tsinghua University</span><br>
+            <span class="author-block"><sup style="color:#9b51e0;">6</sup>Tencent Robotics X</span><br>
             <!-- <span class="author-block"><sup style="color:#ed4b82;">6</sup>University of Victoria,</span>
             <span class="author-block"><sup style="color:#9b51e0;">7</sup>Princeton University</span> -->
           </div>
@@ -142,7 +126,7 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2311.15596.pdf"
+                <a href="https://arxiv.org/pdf/2410.11623"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -151,7 +135,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://huggingface.co/papers/2311.15596"
+                <a href="https://huggingface.co/papers/2410.11623"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <p style="font-size:18px">🤗</p>
@@ -159,20 +143,20 @@
                   <span>HF Paper</span>
                 </a>
               </span>
-              <span class="link-block">
+              <!-- <span class="link-block"> -->
                 <!-- @TODO: change links -->
-                <a href="https://huggingface.co/datasets/"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
+                <!-- <a href="https://huggingface.co/datasets/" -->
+                   <!-- class="external-link button is-normal is-rounded is-dark"> -->
+                  <!-- <span class="icon"> -->
                       <!-- <i class="far fa-images"></i> -->
-                      <p style="font-size:18px">🤗</p>
+                      <!-- <p style="font-size:18px">🤗</p> -->
                       <!-- 🔗 -->
-                  </span>
-                  <span>Dataset</span>
-                </a>
-              </span>
+                  <!-- </span> -->
+                  <!-- <span>Dataset</span> -->
+                <!-- </a> -->
+              <!-- </span> -->
               <span class="link-block">
-                <a href="https://github.com/AdaCheng/EgoThink"
+                <a href="https://github.com/AdaCheng/VidEgoThink"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
