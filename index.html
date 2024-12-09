@@ -302,17 +302,77 @@
             
 <section class="section">
   <div class="container">
+
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            Given that the utilization of foundation models in Embodied AI remains an open research question, we carefully design four types of interrelated tasks for comprehensive assessment: (i) video question-answering, (ii) hierarchy planning, (iii) visual grounding, (iv) reward modeling.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="columns is-centered has-text-centered">
       <!-- <div class="column is-full-width has-text-centered"> -->
       <div class="column is-four-fifths">
         <h2 class="title is-3">1. Video Question Answering</h2>
         <div class="content has-text-justified">
           <p>
-            Considering the essential abilities for observing and interacting with the real world from a first-person perspective, we decompose the content of video modalities around “myself” into three main elements: object, action, and scene. Furthermore, we explore a series of fine-grained dimensions from these elements.
+            Previous evaluation studies on egocentric vision have predominantly focused on static images, constrained by the input format limitations of earlier MLLMs. However, recent advancements in API-based and video-based MLLMs have demonstrated significant progress. Since our real world is inherently dynamic and humans frequently process substantial amounts of video data, it is crucial to evaluate the video understanding capabilities of MLLMs. Considering the essential abilities for observing and interacting with the real world from a first-person perspective, we decompose the content of video modalities around “myself” into three main elements: object, action, and scene. Furthermore, we explore a series of fine-grained dimensions from these elements.
           </p>
           <img src="static/images/vqa.png" alt="algebraic reasoning" class="center">
           <div class="content has-text-centered">
             <p><b><i>Figure 2:</i></b> Case of video question answering.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">2. Hierarchy Planning</h2>
+        <div class="content has-text-justified">
+          <p>
+            Recently, a hierarchy planning framework has been proposed to combine the advantages of foundation models and traditional methods in Embodied AI. In detail, foundation models are used as the planner to decompose high-level task instructions (e.g., “cook salmon”) into either mid-level steps (e.g., “# put salmon in the microwave’) or low-level atomic actions (e.g., “find(microwave)”), which is much more convenient for controlling. Therefore, we design two types of planning tasks: high-level goal to mid-level step (High-to-Mid), and mid-level step to low-level action (Mid-to-Low).
+          </p>
+          <img src="static/images/hp.png" alt="algebraic reasoning" class="center">
+          <div class="content has-text-centered">
+            <p><b><i>Figure 3:</i></b> Case of hierarchy planning.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">3. Visual Grounding</h2>
+        <div class="content has-text-justified">
+          <p>
+            While natural language is effective for human communication, it cannot be directly translated into low-level actions or grounded in the real world. Consequently, visual grounding has garnered significant attention in both image- and video-based MLLMs. This task requires models to ground complex natural language descriptions or instructions in an image or video and output the corresponding pixel-level bounding boxes, masks, or frames. The bounding boxes and masks can directly identify actionable objects, while the frames can provide sufficient spatial or temporal information for downstream tasks. Therefore, we specifically design three tasks for different situations: object grounding, frame grounding, and temporal grounding.
+          </p>
+          <img src="static/images/vg.png" alt="algebraic reasoning" class="center">
+          <div class="content has-text-centered">
+            <p><b><i>Figure 4:</i></b> Case of visual grounding.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">4. Reward Modeling</h2>
+        <div class="content has-text-justified">
+          <p>
+            In Embodied AI, manually designing reward functions to supervise actions is challenging due to the need for accuracy and diversity, especially for human activities. Benefiting from the large-scale Internet training corpus, foundation models can serve as reward models with built-in commonsense and reasoning capabilities. As a reward model, MLLMs should first observe the video to determine the completion status of the target motion. If the action is not completed, the reward model should further provide fine-grained feedback to help achieve the goal. Hence, we specifically design two types of tasks: critique, and feedback.
+          </p>
+          <img src="static/images/rm.png" alt="algebraic reasoning" class="center">
+          <div class="content has-text-centered">
+            <p><b><i>Figure 5:</i></b> Case of reward modeling.</p>
           </div>
         </div>
       </div>
