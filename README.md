@@ -5,7 +5,7 @@
 [**🌐 Homepage**](https://adacheng.github.io/VidEgoThink) | [**🤗 Paper**](https://huggingface.co/papers/2410.11623) | [**📖 arXiv**](https://arxiv.org/pdf/2410.11623) | [**🏆 Leaderboard**](https://adacheng.github.io/VidEgoThink/#leaderboard)
 
 <p align="center">
-  <img src="./static/images/intro.png" alt="intro" width="80%">
+  <img src="./static/images/intro.png" alt="intro" width="100%">
 </p>
 
 <b><i>Figure 1:</i></b> The main tasks of VidEgoThink benchmark to comprehensively assess the egocentric video understanding capabilities in Embodied AI. There are four types of tasks, including video question answering, hierarchy planning, visual grounding, and reward modeling. These four tasks are complementary to each other to implement a complete goal for Embodied AI.
