@@ -56,17 +56,35 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 </div>
 
 
-<!-- ## 💾 Dataset
+## 💾 Dataset
 
-### Download (Choose One of Two)
+### 1. Download Original Egocentric Videos
 
-1. Clone our [GitHub Repo](https://github.com/AdaCheng/EgoThink/tree/main/data).
+You can use [Ego4D CLI](https://ego4d-data.org/docs/CLI/) to get the original egocentric videos of [Ego4d GoalStep](https://github.com/facebookresearch/ego4d-goalstep?tab=readme-ov-file#download).
+
 ```sh
-git clone https://github.com/AdaCheng/EgoThink.git
+# download goalstep videos
+ego4d --datasets full_scale --benchmark goalstep -o <out-dir>
+```
+
+### 2. Download Our Annotations
+
+Please directly clone our [GitHub Repo](https://github.com/AdaCheng/VidEgoThink/tree/main/data).
+
+```sh
+git clone https://github.com/AdaCheng/VidEgoThink.git
 cd data
 ```
 
-2. Download in our [Hugging Face Repo](https://huggingface.co/datasets/EgoThink/EgoThink). 
+### 3. Prepare Videos and Images
+
+Considering the [license](https://ego4ddataset.com/ego4d-license/) of [Ego4D](https://ego4d-data.org/) and the large file size, readers need to use our scripts to process the original egocentric videos.
+
+@todo
+
+> 😎 We will also try to share our videos and images to external cloud soon.
+
+<!-- 
 
 ## 🔧 Dependencies
 > Here we provide the basic environment, you need to additionally install requirements for your evaluated open-source models.
