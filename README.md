@@ -26,7 +26,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 ### 1. Video Question Answering
 
 <div align="center">
-  <img src="./static/images/vqa.png" alt="overview" width="80%">
+  <img src="./static/images/vqa.png" alt="overview" width="100%">
 
   <b><i>Figure 2:</i></b> Case of video question answering.
 </div>
@@ -34,7 +34,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 ### 2. Hierarchy Planning
 
 <div align="center">
-  <img src="./static/images/hp.png" alt="overview" width="80%">
+  <img src="./static/images/hp.png" alt="overview" width="100%">
 
   <b><i>Figure 2:</i></b> Case of hierarchy planning.
 </div>
@@ -42,7 +42,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 ### 3. Visual Grounding
 
 <div align="center">
-  <img src="./static/images/vg.png" alt="overview" width="80%">
+  <img src="./static/images/vg.png" alt="overview" width="100%">
 
   <b><i>Figure 2:</i></b> Case of visual grounding.
 </div>
@@ -50,7 +50,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 ### 4. Reward Modeling
 
 <div align="center">
-  <img src="./static/images/rm.png" alt="overview" width="80%">
+  <img src="./static/images/rm.png" alt="overview" width="100%">
 
   <b><i>Figure 2:</i></b> Case of reward modeling.
 </div>
@@ -76,9 +76,44 @@ git clone https://github.com/AdaCheng/VidEgoThink.git
 cd data
 ```
 
+The format of our annotations are as follows, where this ```video_path``` indicates the clipped video from ```start_time``` to ```end_time``` of the original ```video_uid``` in Ego4D GoalStep. The ```image_path``` contains the uniformly sampled keyframes from our clipped videos.
+
+```json
+[
+    {
+        "video_uid": "a13a145f-920a-44ec-8aef-b489c097f4a7",
+        "start_time": 294.21739,
+        "end_time": 341.15273,
+        "video_path": "151.mp4",
+        "image_path": [
+            "151/frame_0001.png",
+            "151/frame_0015.png",
+            "151/frame_0030.png",
+            "151/frame_0045.png",
+            "151/frame_0060.png",
+            "151/frame_0074.png",
+            "151/frame_0089.png",
+            "151/frame_0104.png"
+        ],
+        "question": "How many times did I adjust a container in the cupboard with my right hand?",
+        "answer": "Twice."
+    },
+]
+```
+
+
 ### 3. Prepare Videos and Images
 
 Considering the [license](https://ego4ddataset.com/ego4d-license/) of [Ego4D](https://ego4d-data.org/) and the large file size, readers need to use our scripts to process the original egocentric videos.
+
+- Prepare clipped videos.
+
+```sh
+python video_clip.py \
+    --data_path /VidEgoThin/data/${annotation_file} \
+    --video_folder /goal_step/v2/full_scale/ \
+    --output_folder /data/${clipped_video_file}
+```
 
 @todo
 
