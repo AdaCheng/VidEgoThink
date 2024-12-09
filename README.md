@@ -36,7 +36,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 <div align="center">
   <img src="./static/images/hp.png" alt="overview" width="85%">
 
-  <b><i>Figure 2:</i></b> Case of hierarchy planning.
+  <b><i>Figure 3:</i></b> Case of hierarchy planning.
 </div>
 
 ### 3. Visual Grounding
@@ -44,7 +44,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 <div align="center">
   <img src="./static/images/vg.png" alt="overview" width="85%">
 
-  <b><i>Figure 2:</i></b> Case of visual grounding.
+  <b><i>Figure 4:</i></b> Case of visual grounding.
 </div>
 
 ### 4. Reward Modeling
@@ -52,7 +52,7 @@ Given that the utilization of foundation models in Embodied AI remains an open r
 <div align="center">
   <img src="./static/images/rm.png" alt="overview" width="85%">
 
-  <b><i>Figure 2:</i></b> Case of reward modeling.
+  <b><i>Figure 5:</i></b> Case of reward modeling.
 </div>
 
 
