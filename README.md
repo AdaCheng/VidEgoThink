@@ -147,10 +147,10 @@ pip install -r requirements.txt
 1. create `test_{new_model}.py` in `/models`.
 2. Add the new model in `get_model()` in `/models/__init__.py`.
 ```python
-# BLIP2-7B
-if model_name == 'blip2-7b':
-  from .test_blip2 import TestBlip2
-  return TestBlip2(name='blip2_opt', model_type='pretrain_opt6.7b', config_path='/models/blip_configs/blip2_pretrain_opt6.7b.yaml', device=device)
+# Qwen2-VL-7B-Instruct
+if model_name == 'qwen2_vl':
+    from .test_qwen2vl import TestQwen2VL
+    return TestQwen2VL(device)
 ```
 
 ### Inference
@@ -213,7 +213,7 @@ python show_result.py \
 
 ## 🏆 Leaderboard
 
-### Update
+<!-- ### Update
 > 👋 <b>Feel free to contribute to the performance of your model by adding it to our "RESULTS SECTION" (from line 398) in <a href="https://github.com/AdaCheng/EgoThink/blob/main/index.html">index.html</a>; we will review and merge it accordingly.</b>
 
 ```html
@@ -233,17 +233,23 @@ python show_result.py \
     <td><b>64.0</b></td>
     <td><b>84.0</b></td>
 </tr> 
-```
+``` -->
 
 ### Overview
 
-The detailed Table can be found in [Here](https://adacheng.github.io/EgoThink/#leaderboard).
+<!-- The detailed Table can be found in [Here](https://adacheng.github.io/EgoThink/#leaderboard). -->
 
 <div align="center">
-  <img src="./static/images/leaderboard.png" alt="overview" width="100%">
+  <img src="./static/images/result_vqa.png" alt="overview" width="90%">
 
-  <b><i>Table 1:</i></b> Combined single-answer grading scores on zero-shot setups for various dimensions. The <b>bold</b> indicates the best performance while the <u>underline</u> indicates the second-best performance. Exist, Attr, Afford, Loc, Spatial, Count, Compar, Situated, Nav and Assist represent existence, attribute, affordance, location, spatial relationship, counting, comparison, situated reasoning, navigation, and assistance.
-</div> -->
+  <b><i>Table 1:</i></b> Experimental results of video question answering. OE, OO, OI, OC, OS, OP denote object existence, object order, object interaction, object count, object state, object prediction. AE, AS, AC indicates action existence, action sequence, action count. SE, ST, SP denote scene existence, scene transition, scene prediction. The bold font denotes the best performance and the underline font denotes the second-best performance.
+</div>
+
+<div align="center">
+  <img src="./static/images/result_all.png" alt="overview" width="90%">
+
+  <b><i>Table 2:</i></b> Experimental results of video question answerng, hierarchy planning, visual grounding, and reward modeling tasks. The bold font denotes the best performance and the underline font denotes the second-best performance.
+</div>
 
 
 ## Contact
@@ -260,8 +266,24 @@ year={2024}
 }
 ```
 
+> If you are intested in our VidEgoThink, we strongly recommend you to read our previous related work, <b>[EgoThink](https://adacheng.github.io/EgoThink/).</b>🥰
+```bibtex
+@InProceedings{Cheng_2024_CVPR,
+    author    = {Cheng, Sijie and Guo, Zhicheng and Wu, Jingwen and Fang, Kechen and Li, Peng and Liu, Huaping and Liu, Yang},
+    title     = {EgoThink: Evaluating First-Person Perspective Thinking Capability of Vision-Language Models},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2024},
+    pages     = {14291-14302}
+}
+```
+
+
+
+
 ## Acknowledge
-Thanks to Xiang Yue, Yuanzhi Li, Jiangjie Chen for their early discussion.
+
+Thanks to Yuyang You for his support in data collection and inference. Thanks to Xiang Yue, Yuanzhi Li, Jiangjie Chen for their early discussion.
 
 Furthermore, we appreciate the developers behind the following projects for their significant contributions to our research: [EgoThink](https://github.com/AdaCheng/EgoThink), [Ego4D](https://github.com/facebookresearch/Ego4d), [Multi-Modality-Arena](https://github.com/OpenGVLab/Multi-Modality-Arena/tree/main/tiny_lvlm_evaluation), [FastChat](https://github.com/lm-sys/FastChat).
 
