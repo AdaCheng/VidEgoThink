@@ -112,7 +112,15 @@ Considering the [license](https://ego4ddataset.com/ego4d-license/) of [Ego4D](ht
 python video_clip.py \
     --data_path /VidEgoThin/data/${annotation_file} \
     --video_folder /goal_step/v2/full_scale/ \
-    --output_folder /data/${clipped_video_file}
+    --output_folder /data/${clipped_video_folder}
+```
+
+- Prepare sampled keyframes. (Optional, we use the same keyframes for multi-images MLLMs to ensure fairness. You can choose better strategy.)
+
+```sh
+python keyframe_extract.py \
+    --input_folder /data/${clipped_video_folder} \
+    --output_folder /data/${keyframe_folder}
 ```
 
 @todo
