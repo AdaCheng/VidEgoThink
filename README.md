@@ -157,7 +157,7 @@ if model_name == 'blip2-7b':
 
 - API-based Model
 
-Please update the API-based models' keys and base_urls between the line 23 to line 33 of file [gpt_eval.py](https://github.com/AdaCheng/EgoThink/blob/main/gpt_eval.py#L23).
+Please update the API-based models' keys and base_urls between the line 23 to line 33 of file [gpt_eval.py](https://github.com/AdaCheng/VidEgoThink/blob/main/gpt_eval.py#L23).
 ```sh
 # dataset: Activity, Object/existence, etc.
 # MODEL: GPT series models, such as gpt-4o
@@ -182,7 +182,7 @@ python eval.py \
 
 ### Evaluation
 
-Please update the API-based models' key and base between the line 463 to line 546 of file [common.py](https://github.com/AdaCheng/EgoThink/blob/main/common.py#L463).
+Please update the API-based models' key and base between the line 463 to line 546 of file [common.py](https://github.com/AdaCheng/VidEgoThink/blob/main/common.py#L463).
 
 ```sh
 # data-folder: the folder name of answer.
