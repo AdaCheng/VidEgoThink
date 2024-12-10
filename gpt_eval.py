@@ -5,10 +5,16 @@ import datetime
 from tqdm import tqdm
 
 from openai import AzureOpenAI
+from openai import OpenAI
 import openai
 import requests
 import base64
-    
+import time
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from m2l_prompt import m2l_caption_prompt, m2l_frame_prompt, m2l_text_prompt
+
+
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
@@ -77,96 +83,150 @@ class LLM_API:
         return response.choices[0].message.content
 
 def load_dataset(args):
-    annotation_path = args.dataset_path
+    annotation_path = args.annotation_path
     with open(annotation_path, 'r') as f:
         dataset = json.load(f)
     for i, d in enumerate(dataset):
         video_file = d['video_path']
         image_files = d['image_path']
-        dataset[i]['video'] = os.path.join("/apdcephfs_cq10/share_1150325/csj/videgothink/goalstep_val_clean/", video_file)
-        dataset[i]['images'] = [os.path.join("/apdcephfs_cq10/share_1150325/csj/videgothink/goalstep_val_qa_keyframe/", image_file) for image_file in image_files]
+        if args.inference_type == "caption":
+            captions = d['caption']
+        dataset[i]['video'] = os.path.join(args.video_folder, video_file)
+        dataset[i]['images'] = [os.path.join(args.image_folder, image_file) for image_file in image_files]
     return dataset
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run GPT Inference on a dataset")
-
-    # models
-    parser.add_argument("--model_name", type=str, default="gpt-4o-mini")
-    parser.add_argument("--api_key", type=str, default=None)
-    parser.add_argument("--api_base", type=str, default=None)
-    parser.add_argument("--inference_type", type=str, default="frames")
-
-    # datasets
-    parser.add_argument('--dataset_path', type=str, default="/apdcephfs_cq10/share_1150325/csj/videgothink/final_goalstep_rm_critique.json")
-    parser.add_argument("--answer_path", type=str, default="./answer/rm_critique")
-    parser.add_argument('--task', type=str, default="rm_critique")
-
-    args = parser.parse_args()
-
-    if args.model_name == "gpt-4-tubro" and (args.inference_type != "caption" or args.inference_type != "narration"):
-        raise ValueError(f"gpt-4-turbo does not support multi-image inference :(")
-
-    llm_api = LLM_API('gpt-4o')
-
-    dataset = load_dataset(args)
-    model_answers = []
-    ref_answers = []
-    question_files = []
-    q_id = 0
-    for item in tqdm(dataset[:10], desc=f"Running {args.model_name} on task {args.task}"):
-        q_id += 1
-        question = item["question"]
-        images = item["images"]
-        answer = item["answer"]
-
+def generate_item(args, item):  
+    q_id = item["q_id"]
+    question = item["question"]
+    images = item["images"]
+    answer = item["answer"]
+    if args.inference_type == "caption":
+        caption = item["caption"]
+        if "vqa" in args.task:
+            prompt = f"Imagine you are the camera wearer (I) who recorded the video.\nHere is the captions of the video:\n{caption}.\nPlease directly answer the question as short as possible.\nQuestion: {question} Short answer:"
+        elif args.task == "hp_high2mid":
+            prompt = f"Imagine you are the camera wearer (I) who recorded the video.\nHere is the captions of the video: {caption}.\n\nGiven the high-level goal (e.g., 'making dumpling') and the current progress video, you need to predict the next mid-level step (e.g., fold dumplings on a cutting board) to achieve the goal. Please directly generate the next one step as short as possible. Question: {question} Short answer:"
+        elif args.task == "hp_mid2low":
+            prompt = m2l_caption_prompt + f"\n\Here is the caption of the video: {caption}.\nQuestion: {question}\nList of actionable functions:"
+        elif args.task == "rm_critique":
+            prompt = f"Imagine you are the camera wearer (I) who recorded the video.\nHere is the captions of the video:\n{caption}.\n Please directly answer yes or no to determin whether the task is completed or not. Question: {question} Short answer:"
+        elif args.task == "rm_feedback":
+            prompt = f"Imagine you are the camera wearer (I) who recorded the video.\nHere is the captions of the video:\n{caption}.\nThe video contains an uncompleted task. Please identify the essential completion signals in my observations that indicate the task is not completed by me. Please directly generate the rationale as short as possible.\nQuestion: {question}\nShort Answer:"
+    elif "frames" in args.inference_type:
         if args.task == "rm_critique":
             prompt = "Imagine you are the camera wearer (I) who recorded the video. Please directly answer yes or no to determin whether the task is completed or not. Question: {} Short answer:".format(question)
         elif args.task == "rm_feedback":
             prompt = "Imagine you are the camera wearer (I) who recorded the video. The video contains an uncompleted task. Please identify the essential completion signals in my observations that indicate the task is not completed by me. Please directly generate the rationale as short as possible. \nQuestion: {} \nShort Answer:".format(question)
         elif args.task == "hp_high2mid":
             prompt = "Imagine you are the camera wearer (I) who recorded the video. Given the high-level goal (e.g., 'making dumpling') and the current progress video, you need to predict the next mid-level step (e.g., fold dumplings on a cutting board) to achieve the goal. Please directly generate the next one step as short as possible. Question: {} Short answer:".format(question)
-        elif args.task == "vqa":
+        elif "vqa" in args.task:
             prompt = "Imagine you are the camera wearer (I) who recorded the video. Please directly answer the question as short as possible. Question: {} Short answer:".format(question)
+        elif args.task == "hp_mid2low":
+            prompt = m2l_frame_prompt + "{question} List of actionable functions:"
+    elif args.inference_type in ["narration", "text"]:
+        if args.task == "rm_critique":
+            prompt = "Please directly answer yes or no to determin whether the task is completed or not. Question: {} Short answer:".format(question)
+        elif args.task == "rm_feedback":
+            prompt = "Please identify the essential completion signals in my observations that indicate the task is not completed by me. Please directly generate the rationale as short as possible. \nQuestion: {} \nShort Answer:".format(question)
+        elif args.task == "hp_high2mid":
+            prompt = "Given the high-level goal (e.g., 'making dumpling') and the current progress video, you need to predict the next mid-level step (e.g., fold dumplings on a cutting board) to achieve the goal. Please directly generate the next one step as short as possible. Question: {} Short answer:".format(question)
+        elif "vqa" in args.task:
+            prompt = "Please directly answer the question as short as possible. Question: {} Short answer:".format(question)
+        elif args.task == "hp_mid2low":
+            prompt = m2l_text_prompt + "{question} List of actionable functions:"
 
-        try:
-            output = llm_api.request_vision(images, prompt)
-        except Exception as e:
-            output = "error."
-        if "Short Answer: " in output:
-            output = output.split("Short Answer: ")[1]
-        print(output)
+    max_retries = 5  # 最大重试次数
+    retry_delay = 2  # 重试之间的延时，单位为秒
+    attempt = 0  # 当前尝试次数
+    if "frames" in args.inference_type:
+        while True:
+            try:
+                output = llm_api.request_vision(images, prompt)
+                if "Short Answer: " in output:
+                    output = output.split("Short Answer: ")[1]
+                print(output)
+                break
+            except Exception as e:
+                # print(e)
+                if attempt >= max_retries:
+                    print(e)
+                    output = "error."
+                    break
+                time.sleep(retry_delay)
+                attempt += 1
+    else:
+        while True:
+            try:
+                output = llm_api.request_general(prompt)
+                if "Short Answer: " in output:
+                    output = output.split("Short Answer: ")[1]
+                print(output)
+                break
+            except Exception as e:
+                # print(e)
+                attempt += 1
+                if attempt >= max_retries:
+                    print(e) 
+                    output = "error."
+                    print(output)
+                    break
+    return output, question, answer, q_id
 
-        # if args.inference_type == "caption":
-        #     question = entry["caption_prompt"]
-        #     answer = entry["answer"]
-        #     pred = textual_inference(question, gpt, model=args.model_name)
-        # elif args.inference_type == "frames":
-        #     question = entry["frames_prompt"]
-        #     answer = entry["answer"]
-        #     pred = multi_image_inference(question, entry["frame_list"], gpt_key, model=args.model_name)
-        # elif args.inference_type == "frames_caption":
-        #     question = entry["frames_caption_prompt"]
-        #     answer = entry["answer"]
-        #     pred = multi_image_inference(question, entry["frame_list"], gpt_key, model=args.model_name)
-        # else:
-        #     raise ValueError(f"After a cubersome search, we cannot locat the inference type {args.inference_type} :(")
-        
-        model_answers.append({
-            "question_id" : q_id,
-            "model_id" : args.model_name,
-            "choices" : [{"index" : 0, "turns" : [output]}]
-        })
-        ref_answers.append({
-            'question_id': q_id,
-            'model_id': 'ground_truth',
-            'choices':[{'index': 0, "turns": [answer]}]
-        })
-        question_files.append({
-            'question_id': q_id,
-            'turns': [question]
-        })
-        
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run GPT Inference on a dataset")
+
+    # models
+    parser.add_argument("--model_name", type=str, default="gpt-4o")
+    parser.add_argument("--inference_type", type=str, default="frames")
+
+    # datasets
+    parser.add_argument('--annotation_path', type=str, default="/apdcephfs_cq10/share_1150325/csj/videgothink/final_goalstep_rm_critique.json")
+    parser.add_argument('--video_folder', type=str, default="/apdcephfs_cq10/share_1150325/csj/videgothink/goalstep_val_clean/")
+    parser.add_argument('--image_folder', type=str, default="/apdcephfs_cq10/share_1150325/csj/videgothink/goalstep_val_rm_keyframe/")
+    parser.add_argument("--answer_path", type=str, default="./answer/rm_critique")
+    parser.add_argument('--task', type=str, default="rm_critique")
+
+    args = parser.parse_args()
+
+    llm_api = LLM_API(args.model_name)
+
+    dataset = load_dataset(args)
+    for i, item in enumerate(dataset):
+        item["q_id"] = i + 1
+    model_answers = []
+    ref_answers = []
+    question_files = []
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        future_to_item = {executor.submit(generate_item, args, item): item for item in dataset}
+            # future = submit_with_retry(executor, generate_item, args, item)
+            # future_to_item[future] = item
+    
+        # 等待每个任务完成并处理结果
+        for future in tqdm(as_completed(future_to_item),  total=len(future_to_item), desc=f"Running {args.model_name} on task {args.task}"):
+            item = future_to_item[future]
+            try:
+                output, question, answer, q_id  = future.result()
+                print(question)
+            except Exception as e:
+                print(f"处理项目 {item} 时发生错误: {e}")
+
+            model_answers.append({
+                "question_id" : q_id,
+                "model_id" : args.model_name,
+                "choices" : [{"index" : 0, "turns" : [output]}]
+            })
+            ref_answers.append({
+                'question_id': q_id,
+                'model_id': 'ground_truth',
+                'choices':[{'index': 0, "turns": [answer]}]
+            })
+            question_files.append({
+                'question_id': q_id,
+                'turns': [question]
+            })
     
     result_folder = args.answer_path
     if not os.path.exists(result_folder):

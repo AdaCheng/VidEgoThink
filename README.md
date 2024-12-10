@@ -161,13 +161,19 @@ Please update the API-based models' keys and base_urls between the line 23 to li
 ```sh
 # dataset: Activity, Object/existence, etc.
 # MODEL: GPT series models, such as gpt-4o
+# INFERENCE_TYPE: {caption, frames, 32-frames, text}
+# TASK: {vqa, hp_high2mid, hp_mid2low, rm_critique, rm_feedback}
 python gpt_eval.py \
     --model_name $MODEL \
+    --inference_type $INFERENCE_TYPE \
     --annotation_path /${dataset}/annotations.json \
+    --video_folder /data/${clipped_video_folder} \
+    --image_folder /data/${keyframe_folder} \
     --answer_path /answer/${dataset} \
+    --task $TASK
 ```
 
-- Open-Source Model
+- Open-Source Model (@TODO: double check)
 ```sh
 # dataset: Activity, Object/existence, etc.
 # MODEL: models defined in the models file
@@ -267,6 +273,7 @@ year={2024}
 ```
 
 > If you are intested in our VidEgoThink, we strongly recommend you to read our previous related work, <b>[EgoThink](https://adacheng.github.io/EgoThink/).</b>🥰
+
 ```bibtex
 @InProceedings{Cheng_2024_CVPR,
     author    = {Cheng, Sijie and Guo, Zhicheng and Wu, Jingwen and Fang, Kechen and Li, Peng and Liu, Huaping and Liu, Yang},
