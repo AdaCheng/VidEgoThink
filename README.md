@@ -104,7 +104,7 @@ The format of our annotations are as follows, where this ```video_path``` indica
 
 ### 3. Prepare Videos and Images
 
-Considering the [license](https://ego4ddataset.com/ego4d-license/) of [Ego4D](https://ego4d-data.org/) and the large file size, readers need to use our scripts to process the original egocentric videos.
+> Considering the [license](https://ego4ddataset.com/ego4d-license/) of [Ego4D](https://ego4d-data.org/) and the large file size, readers need to use our scripts to process the original egocentric videos. 😎 We will also try to share our videos and images to external cloud soon.
 
 - Prepare clipped videos.
 
@@ -122,10 +122,6 @@ python keyframe_extract.py \
     --input_folder /data/${clipped_video_folder} \
     --output_folder /data/${keyframe_folder}
 ```
-
-@todo
-
-> 😎 We will also try to share our videos and images to external cloud soon.
 
 <!-- 
 
