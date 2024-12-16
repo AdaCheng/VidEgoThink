@@ -7,13 +7,6 @@ import os
 import io
 import base64
 
-def get_image_path_from_video(video_path):
-    lis = video_path.split("/")
-    # image_folder = '/'.join(lis[:-2] + [lis[-1] + '_img', lis[-1].split('.')[0]])
-    image_folder = video_path.replace("/video/", "/images/").replace(".mp4", "/")
-    print(image_folder)
-    images = os.listdir(image_folder)
-    return os.path.join(image_folder, images[-1])
 
 class TestQwenVLChat:
     def __init__(self, device=None):
@@ -46,19 +39,6 @@ class TestQwenVLChat:
     #     return response
 
     def generate(self, image, question, max_new_tokens=256, planning=False, tg=False, rm_critique=False, rm_feedback=False, hp_h2m=False):
-        # get the last frame of the video and save to /tmp/EgoThink/
-        # cap = cv2.VideoCapture(video)
-        # fps = cap.get(cv2.CAP_PROP_FPS)
-        # frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        # cap.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
-        # ret, frame = cap.read()
-        # cap.release()
-        # if not os.path.exists("/tmp/EgoThink"):
-        #     os.makedirs("/tmp/EgoThink")
-        # cv2.imwrite("/tmp/EgoThink/last_frame.jpg", frame)
-        if not image.endswith("jpg"):
-            image = get_image_path_from_video(image)
-
         if rm_critique:
             question = "Imagine you are the camera wearer (I) who recorded the video. Please directly answer yes or no to determin whether the task is completed or not. Question: {} Short answer:".format(question)
         elif rm_feedback:

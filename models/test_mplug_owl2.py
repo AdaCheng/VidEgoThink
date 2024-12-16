@@ -8,13 +8,6 @@ from mplug_owl2.conversation import conv_templates, SeparatorStyle
 from mplug_owl2.model.builder import load_pretrained_model
 from mplug_owl2.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path, KeywordsStoppingCriteria
 
-def get_image_path_from_video(video_path):
-    lis = video_path.split("/")
-    # image_folder = '/'.join(lis[:-2] + [lis[-1] + '_img', lis[-1].split('.')[0]])
-    image_folder = video_path.replace("/video/", "/images/").replace(".mp4", "/")
-    images = os.listdir(image_folder)
-    return os.path.join(image_folder, images[-1])
-
 
 class TestMplugOwl2:
     def __init__(self, device):
@@ -25,9 +18,6 @@ class TestMplugOwl2:
 
     @torch.no_grad()
     def generate(self, image, question, max_new_tokens=256, planning=False, tg=False, rm_critique=False, rm_feedback=False, hp_h2m=False):
-        if not image.endswith("jpg"):
-            image = get_image_path_from_video(image)
-
         if rm_critique:
             question = "Imagine you are the camera wearer (I) who recorded the video. Please directly answer yes or no to determin whether the task is completed or not. Question: {} Short answer:".format(question)
         elif rm_feedback:

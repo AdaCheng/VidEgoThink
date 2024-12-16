@@ -33,14 +33,6 @@ def image_parser(image_file):
     out = image_file.split(',')
     return out
 
-def get_image_path_from_video(video_path):
-    lis = video_path.split("/")
-    # image_folder = '/'.join(lis[:-2] + [lis[-1] + '_img', lis[-1].split('.')[0]])
-    image_folder = video_path.replace("/video/", "/images/").replace(".mp4", "/")
-    print(image_folder)
-    images = os.listdir(image_folder)
-    return os.path.join(image_folder, images[-1])
-
 def load_image(image_file):
     if image_file.startswith("http") or image_file.startswith("https"):
         response = requests.get(image_file)
@@ -183,10 +175,6 @@ class TestLLaVA2:
         conv.append_message(conv.roles[1], None)
         prompt = conv.get_prompt()
 
-        if not image.endswith("jpg"):
-            image = get_image_path_from_video(image)
-
-        # if image[0].endswith("jpg"):
         image_files = image_parser(image)
         images = load_images(image_files)
         image_sizes = [x.size for x in images]

@@ -9,14 +9,6 @@ llama_dir = "/disks/disk1/share/models/llama_adapter"
 model_path = "BIAS-7B"
  # llama_adapter_v2_BIAS-7B.pth, llama_adapter_v2_LORA-BIAS-7B.pth
 
-def get_image_path_from_video(video_path):
-    lis = video_path.split("/")
-    # image_folder = '/'.join(lis[:-2] + [lis[-1] + '_img', lis[-1].split('.')[0]])
-    image_folder = video_path.replace("/video/", "/images/").replace(".mp4", "/")
-    print(image_folder)
-    images = os.listdir(image_folder)
-    return os.path.join(image_folder, images[-1])
-
 class TestLLamaAdapterV2:
     def __init__(self, device=None) -> None:
         # choose from BIAS-7B, LORA-BIAS-7B
@@ -28,9 +20,6 @@ class TestLLamaAdapterV2:
 
     @torch.no_grad()
     def generate(self, image, question, max_new_tokens=256, planning=False, tg=False, rm_critique=False, rm_feedback=False, hp_h2m=False):
-        if not image.endswith("jpg"):
-            image = get_image_path_from_video(image)
-        # if image.endswith("jpg"):
         imgs = [get_BGR_image(image)]
         imgs = [self.img_transform(x) for x in imgs]
         imgs = torch.stack(imgs, dim=0).to(self.device)
