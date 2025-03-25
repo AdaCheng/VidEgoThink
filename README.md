@@ -110,7 +110,7 @@ The format of our annotations are as follows, where this ```video_path``` indica
 
 ```sh
 python video_clip.py \
-    --data_path /VidEgoThin/data/${annotation_file} \
+    --data_path /VidEgoThink/data/${annotation_file} \
     --video_folder /goal_step/v2/full_scale/ \
     --output_folder /data/${clipped_video_folder}
 ```
